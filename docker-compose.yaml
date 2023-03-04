@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  redis:
+    container_name: "sample-redis"
+    image: redis:6
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/data
+
+  db:
+    container_name: "sample-db"
+    ports:
+      - "5432:5432"
+    build:
+      context: development/db
+      shm_size: 10000000
+    env_file:
+      - development/db/.env
+    volumes:
+      - db:/var/lib/postgresql/data:rw
+
+  app: &django_conf
+    container_name: "sample-app"
+    build:
+      context: ./app
+    command: python manage.py runserver 0.0.0.0:80
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:80"
+
+  celery:
+    <<: *django_conf
+    container_name: "sample-celery"
+    command: celery -A sample worker -n default -E -l debug -Q default
+    ports: []
+
+  celery_beat:
+    <<: *django_conf
+    container_name: "sample-celery-beat"
+    command: celery -A sample beat -l DEBUG --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    ports: []
+
+volumes:
+  db: {}
+  redis: {}
+

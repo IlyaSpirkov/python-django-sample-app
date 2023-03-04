@@ -1,0 +1,101 @@
+[tool.poetry]
+name = "sample"
+version = "1.0.0"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Django = "^3.2"
+
+# django packages
+dj-database-url = "*"
+django-celery-beat = "*"
+django-extensions = "*"
+django-filter = "*"
+django-nose = "*"
+django-redis = "*"
+djangorestframework = "3.13.1"
+djangorestframework-camel-case = "*"
+drf-extra-fields = "*"
+djangorestframework-simplejwt = "*"
+drf-spectacular = "*"
+
+# gunicorn + gevent:
+gevent = "*"
+gunicorn = {extras = ["gevent"], version = "*"}
+psycogreen = "*"
+
+# other packages
+celery = "*"
+psycopg2-binary = "*"
+requests = "*"
+sentry-sdk = "*"
+Werkzeug = "*"
+whitenoise = "*"
+django-pytest = "^0.2.0"
+django-bulk-update-or-create = "^0.3.0"
+phonenumbers = "^8.13.7"
+django-phonenumber-field = "*"
+dacite = "^1.8.0"
+boto3 = "^1.26.84"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+coverage = "*"
+factory-boy = "*"
+flower = "*"
+pytest-cases = "*"
+pytest-cov = "*"
+pytest-deadfixtures = "*"
+pytest-django = "*"
+pytest-env = "*"
+pytest-factoryboy = "*"
+pytest-freezegun = "*"
+pytest-lazy-fixture = "*"
+pytest-mock = "*"
+pytest-randomly = "*"
+pytest-responses = "*"
+pytest-xdist = "*"
+
+[tool.pytest.ini_options]
+addopts = "--ignore=migrations --no-migrations"
+markers = [
+    "slow: slow test",
+]
+python_files = "test_*.py"
+testpaths = [
+    "core/tests/pytest",
+]
+junit_duration_report = "total"
+DJANGO_SETTINGS_MODULE = "sample.settings"
+
+[tool.isort]
+combine_as_imports = true
+known_third_party = ["django", "django_filters", "rest_framework"]
+line_length = 119
+profile = "black"
+skip = "migrations, templates"
+skip_gitignore = true
+
+
+[tool.black]
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | manage.py           # also separately exclude a file named foo.py in the root of the project
+)
+'''
+line-length = 119
+target-version = ["py39"]
