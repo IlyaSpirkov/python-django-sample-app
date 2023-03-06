@@ -68,7 +68,17 @@ WSGI_APPLICATION = "sample.wsgi.application"
 
 # DATABASES = {"default": uri(os.environ.get("DB_URI"), engine="django_db_geventpool.backends.postgresql_psycopg2")}
 # DATABASES = {"default": uri("postgres://sample:sample@db:5432/sample", engine=None)}
-DATABASES = {"default": uri(os.environ.get("DB_URI"), engine=None)}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        # "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
+    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
